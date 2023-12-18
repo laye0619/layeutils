@@ -1,6 +1,6 @@
 # .github/workflows/ci-cd.yml
 # action的名称
-name: Upload Python Package gotwo
+name: Upload Python Package
 
 on:
   # 当master分支有push时，触发action
