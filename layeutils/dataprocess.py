@@ -1,6 +1,4 @@
 import pandas as pd
-from sklearn import preprocessing
-import re
 
 
 def z_score_standardization(df: pd.DataFrame, range_: tuple = (0, 1)) -> pd.DataFrame:
@@ -13,6 +11,7 @@ def z_score_standardization(df: pd.DataFrame, range_: tuple = (0, 1)) -> pd.Data
     Returns:
         pd.DataFrame: _description_
     """
+    from sklearn import preprocessing
 
     values = df.values
     values = values.astype('float32')
@@ -30,6 +29,8 @@ def extract_float_from_str(s: str):
     :param s:
     :return:
     '''
+    import re
+
     result_list = re.findall(r'-?\d+\.?\d*', s)
     return list(map(float, result_list))
 

@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="layeutils",
-    version="0.2.0",
+    version="0.2.1",
     author="LayeWang",
     author_email="laye0619@gmail.com",
     description="Private Utils",
