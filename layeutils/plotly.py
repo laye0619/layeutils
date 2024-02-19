@@ -3,7 +3,18 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 
-def dual_axis_plotly_line(data_df: pd.DataFrame, l1_col: str, l2_col: str, title: str = None) -> Figure:
+def dual_axis_plotly_line(data_df: pd.DataFrame, l1_col: str, l2_col: str, title: str = None):
+    """双坐标轴plotly图，调用show()显示
+
+    Args:
+        data_df (pd.DataFrame): _description_
+        l1_col (str): _description_
+        l2_col (str): _description_
+        title (str, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     trace1 = go.Scatter(
         x=data_df.index,
         y=data_df[l1_col],
@@ -25,7 +36,19 @@ def dual_axis_plotly_line(data_df: pd.DataFrame, l1_col: str, l2_col: str, title
     return go.Figure(data=data, layout=layout)
 
 
-def plotly_simple_line(df: pd.DataFrame, x_series: list, y_series: list, title: str = '', template: str = 'plotly_dark') -> Figure:
+def plotly_simple_line(df: pd.DataFrame, x_series, y_series, title: str = '', template: str = 'plotly_dark'):
+    """最简单的线图，调用show()显示
+
+    Args:
+        df (pd.DataFrame): _description_
+        x_series (_type_): _description_
+        y_series (_type_): _description_
+        title (str, optional): _description_. Defaults to ''.
+        template (str, optional): _description_. Defaults to 'plotly_dark'.
+
+    Returns:
+        _type_: _description_
+    """
     return px.line(
         data_frame=df,
         x=x_series,
