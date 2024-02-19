@@ -54,4 +54,4 @@ def plotly_simple_line(df: pd.DataFrame, x_series, y_series, title: str = '', te
         x=x_series,
         y=y_series,
         title=title,
-        template='template')
+        template=template)
