@@ -13,4 +13,7 @@ def dtale_start(df: pd.DataFrame, precision=None) -> str:
     import dtale
     d = dtale.show(df, precision=precision)
     # return f"http://localhost:{d._main_url.split(':')[-1]}"
-    return f"http://192.168.1.85:{d._main_url.split(':')[-1]}"
+    return [
+        f"https://dtale.home.laye.wang:18443/dtale{s.split('dtale')[-1]}",
+        f"http://192.168.1.85:{d._main_url.split(':')[-1]}"
+    ]
