@@ -2,7 +2,6 @@
     https://docs.gspread.org/en/latest/oauth2.html#service-account
 """
 import gspread
-import homeproxy
 import pandas as pd
 
 
@@ -16,7 +15,6 @@ def get_spreadsheet(file_title: str, folder_id: str = None) -> gspread.Spreadshe
     Returns:
         gspread.Worksheet: _description_
     """
-    homeproxy.using_home_server_proxy()
     return gspread.service_account().open(title=file_title, folder_id=folder_id)
 
 
@@ -31,7 +29,6 @@ def get_worksheet(file_title: str, sheet_name: str, folder_id: str = None) -> gs
     Returns:
         gspread.Worksheet: _description_
     """
-    homeproxy.using_home_server_proxy()
     spreadsheet = gspread.service_account().open(title=file_title, folder_id=folder_id)
     return spreadsheet.worksheet(title=sheet_name)
 
@@ -55,13 +52,11 @@ def update_worksheet_by_df(worksheet: gspread.Worksheet, content_df: pd.DataFram
         worksheet (gspread.Worksheet): _description_
         content_df (pd.DataFrame): _description_
     """
-    homeproxy.using_home_server_proxy()
     worksheet.update(
         [content_df.columns.values.tolist()] + content_df.values.tolist(),
         value_input_option='USER_ENTERED')
 
 
 def add_worksheet(spreadsheet: gspread.Spreadsheet, worksheet_title: str, rows: int, cols: int):
-    homeproxy.using_home_server_proxy()
     added = spreadsheet.add_worksheet(title=worksheet_title, rows=rows, cols=cols)
     return added
