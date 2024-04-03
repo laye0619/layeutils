@@ -17,7 +17,7 @@ def chatgpt_basic_conversation(api_key: str, prompts: list, model: str = 'gpt-3.
     return completion.choices[0].message.content
 
 
-def get_pandasai_agent(openapi_key: str, data, config: dict = None):
+def get_pandasai_agent(data, openapi_key: str = None, config: dict = None):
     """获得pandas-ai库中的Agent对象: https://docs.pandas-ai.com/en/latest/
         Agent.chat("XXX") or 
         Agent.clarification_question("XXX") or 
@@ -26,25 +26,38 @@ def get_pandasai_agent(openapi_key: str, data, config: dict = None):
 
 
     Args:
-        openapi_key (str): _description_
+        openapi_key (str): 如果不传，使用pandasbi的免费key
         data (_type_): Dataframe or [Dataframe1, Dataframe2, ...]
         config (dict, optional): https://docs.pandas-ai.com/en/latest/getting-started/#config. Defaults to None.
 
     Returns:
         _type_: pandasai.Agent
     """
+    import os
+
     from pandasai import Agent
     from pandasai.llm import OpenAI
 
-    llm = OpenAI(api_token=openapi_key)
-    if not config:
-        config = {
-            "llm": llm,
-            "save_logs": False,
-            "save_charts": False,
-            "verbose": False,
-            "enable_cache": False,
-            "open_charts": True
-        }
+    if not openapi_key:
+        os.environ["PANDASAI_API_KEY"] = "$2a$10$AjBzJYa7M.AV8wRfcUisme4ARgSUVF.ooDDIn4MS4S52Umd7N6O12"
+        if not config:
+            config = {
+                "save_logs": False,
+                "save_charts": False,
+                "verbose": False,
+                "enable_cache": False,
+                "open_charts": True
+            }
+    else:
+        llm = OpenAI(api_token=openapi_key)
+        if not config:
+            config = {
+                "llm": llm,
+                "save_logs": False,
+                "save_charts": False,
+                "verbose": False,
+                "enable_cache": False,
+                "open_charts": True
+            }
     agent = Agent(data, config)
     return agent
