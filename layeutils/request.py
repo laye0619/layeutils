@@ -1,8 +1,8 @@
 import json
+import logging
 from time import sleep
 
 import requests
-from loguru import logger
 
 
 def request_post_json(api_url: str, headers: dict, request_param: dict, retry_times: int = 5) -> dict:
@@ -20,7 +20,7 @@ def request_post_json(api_url: str, headers: dict, request_param: dict, retry_ti
                                      headers=headers,
                                      data=request_data)
             if response.status_code != 200:
-                logger.info('返回code不是200！')
+                logging.error('返回code不是200！')
                 raise Exception
         except:
             sleep(2)

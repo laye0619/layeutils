@@ -1,6 +1,7 @@
+import logging
+
 import pymongo
 import pytz
-from loguru import logger
 
 
 def db_save_dict_to_mongodb(
@@ -15,7 +16,7 @@ def db_save_dict_to_mongodb(
     if not isinstance(target_dict, list):
         target_dict = [target_dict]
     if len(target_dict) == 0:
-        logger.warning('准备存入db的数据为空，不能保存！')
+        logging.error('准备存入db的数据为空，不能保存！')
         return
     item = db_col.insert_many(target_dict)
     return item.inserted_ids
