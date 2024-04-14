@@ -1,20 +1,77 @@
 
-def chatgpt_basic_conversation(api_key: str, prompts: list, model: str = 'gpt-3.5-turbo') -> str:
-    """chatgpt最基本的对话，使用前需要使用home_proxy设置代理
+def chatgpt_basic_conversation(
+        api_key: str, prompts: list,
+        model: str = 'gpt-3.5-turbo', base_url: str = None
+) -> str:
+    """chatgpt最基本的对话，如果需要使用别的服务提供商，注意修改base_url
 
     Args:
         api_key (str): _description_
         prompts (list): e.g [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}]
         model (str, optional): _description_. Defaults to 'gpt-3.5-turbo'.
+        base_url (str, optional): _description_. Defaults to None.
 
     Returns:
-        str: ChatGPT response
+        str: _description_
     """
+
     from openai import OpenAI
 
     client = OpenAI(api_key=api_key)
     completion = client.chat.completions.create(model=model, messages=prompts)
     return completion.choices[0].message.content
+
+
+def text_2_audio_openai(
+        api_key: str, text: str, audio_file_path: str = 'speech.mp3',
+        voice: str = 'echo', model: str = 'tts-1', base_url: str = None
+) -> None:
+    """使用openai api从文字生成语音，如果需要使用别的服务提供商，注意修改base_url
+
+    Args:
+        api_key (str): _description_
+        text (str): _description_
+        audio_file_path (str, optional): _description_. Defaults to 'speech.mp3'.
+        voice (str, optional): [alloy, echo, fable, onyx, nova, shimmer]. Defaults to 'echo'.
+        model (str, optional): _description_. Defaults to 'tts-1'.
+        base_url (str, optional): _description_. Defaults to None.
+    """
+    from openai import OpenAI
+    client = OpenAI(api_key=api_key, base_url=base_url)
+    response = client.audio.speech.create(
+        model=model,
+        voice=voice,
+        input=text
+    )
+
+    # response.stream_to_file(speech_file_path)
+    response.write_to_file(audio_file_path)
+
+
+def audio_2_text_openai(
+        api_key: str, audio_file_path: str,
+        model: str = 'whisper-1', base_url: str = None
+) -> str:
+    """使用openai api从语音生成文字，如果需要使用别的服务提供商，注意修改base_url
+
+    Args:
+        api_key (str): _description_
+        audio_file_path (str): _description_
+        model (str, optional): _description_. Defaults to 'whisper-1'.
+        base_url (str, optional): _description_. Defaults to None.
+
+    Returns:
+        str: _description_
+    """
+    from openai import OpenAI
+    client = OpenAI(api_key=api_key, base_url=base_url)
+
+    audio_file = open(audio_file_path, "rb")
+    transcription = client.audio.transcriptions.create(
+        model=model,
+        file=audio_file
+    )
+    return transcription.text
 
 
 def get_pandasai_agent(data, openapi_key: str = None, config: dict = None):
