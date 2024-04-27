@@ -118,3 +118,93 @@ def get_pandasai_agent(data, openapi_key: str = None, config: dict = None):
             }
     agent = Agent(data, config)
     return agent
+
+
+def generate_lobechat_agents(
+        agent_csv_path: str, default_model: str = 'gemini-1.5-pro-latest', model_provider: str = 'google') -> None:
+    """生成lobechat的agent导入文件
+
+    Args:
+        agent_csv_path (str): _description_
+        default_model (str, optional): _description_. Defaults to 'gemini-1.5-pro-latest'.
+        model_provider (str, optional): 如果修改了默认model，需要相应提供provider. Defaults to 'google'.
+    """
+    import json
+
+    import pandas as pd
+
+    df = pd.read_csv(agent_csv_path)
+    df.set_index('item', drop=True, inplace=True)
+
+    group_dict = {
+        prompts_group.split('.')[0]: prompts_group.split('.')[1]
+        for _, prompts_group in df.loc['group'].items()
+    }
+    session_groups = [
+        {
+            "name": group_name,
+            "id": group_id
+        } for group_id, group_name in group_dict.items()
+    ]
+
+    whole_dict = {
+        "exportType": "agents",
+        "version": 4,
+        "state": {
+            "sessionGroups": session_groups,
+            "sessions": []
+        }
+    }
+
+    for prompts_name, prompts_data in df.items():
+        prompts_dict = prompts_data.to_dict()
+        single_dict = {
+            "group": prompts_dict['group'].split('.')[0],
+            "pinned": bool(int(prompts_dict['pinned'])),
+            "type": "agent",
+            "model": default_model,
+            "meta": {
+                "avatar": prompts_dict['avatar'],
+                "title": prompts_name,
+                "description": prompts_dict['description'],
+            },
+
+            "config": {
+                "displayMode": "chat",
+
+                "enableAutoCreateTopic": True,
+                "autoCreateTopicThreshold": 2,
+
+                "enableCompressThreshold": bool(int(prompts_dict['enableCompressThreshold'])),
+                "compressThreshold": int(prompts_dict['compressThreshold']),
+
+                "enableHistoryCount": bool(int(prompts_dict['enableHistoryCount'])),
+                "historyCount": int(prompts_dict['historyCount']),
+
+                "inputTemplate": "" if pd.isna(prompts_dict['inputTemplate']) else prompts_dict['inputTemplate'],
+
+                "model": default_model,
+
+                "params": {
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0,
+                    "temperature": float(prompts_dict['temperature']),
+                    "top_p": 1
+                },
+                "plugins": [],
+                "provider": model_provider,
+                "systemRole": "" if pd.isna(prompts_dict['prompt']) else prompts_dict['prompt'],
+                "tts": {
+                    "showAllLocaleVoice": False,
+                    "sttLocale": "auto",
+                    "ttsService": "openai",
+                    "voice": {
+                        "openai": "echo"
+                    }
+                }
+            }
+        }
+        whole_dict["state"]["sessions"].append(single_dict)
+
+    with open(f"lobechat_agents_{default_model}.json", "w", encoding="utf8") as f:
+        json.dump(whole_dict, f, ensure_ascii=False)
