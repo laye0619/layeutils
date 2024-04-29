@@ -1,9 +1,29 @@
 
-def chatgpt_basic_conversation(
+def get_available_models_openai(
+        api_key: str, base_url: str = None
+) -> dict:
+    """Get available models
+
+    Args:
+        api_key (str): _description_
+        base_url (str, optional): _description_. Defaults to None.
+
+    Returns:
+        dict: {'model_id': 'model_provider'}
+    """
+    from openai import OpenAI
+
+    client = OpenAI(api_key=api_key, base_url=base_url)
+    model_list = client.models.list().to_dict()['data']
+    result_dict = {model['id']: model['owned_by'] for model in model_list}
+    return result_dict
+
+
+def basic_conversation_openai(
         api_key: str, prompts: list,
         model: str = 'gpt-3.5-turbo', base_url: str = None
 ) -> str:
-    """chatgpt最基本的对话，如果需要使用别的服务提供商，注意修改base_url
+    """openai最基本的对话，如果需要使用别的服务提供商，注意修改base_url
 
     Args:
         api_key (str): _description_
@@ -17,7 +37,7 @@ def chatgpt_basic_conversation(
 
     from openai import OpenAI
 
-    client = OpenAI(api_key=api_key)
+    client = OpenAI(api_key=api_key, base_url=base_url)
     completion = client.chat.completions.create(model=model, messages=prompts)
     return completion.choices[0].message.content
 
