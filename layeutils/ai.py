@@ -169,7 +169,7 @@ def generate_lobechat_agents(
 
     whole_dict = {
         "exportType": "agents",
-        "version": 4,
+        "version": 5,
         "state": {
             "sessionGroups": session_groups,
             "sessions": []
