@@ -141,7 +141,7 @@ def get_pandasai_agent(data, openapi_key: str = None, config: dict = None):
 
 
 def generate_lobechat_agents(
-        agent_csv_path: str, default_model: str = 'gemini-1.5-pro-latest', model_provider: str = 'google') -> None:
+        agent_csv_path: str, version: int, default_model: str = 'gemini-1.5-pro-latest', model_provider: str = 'google') -> None:
     """生成lobechat的agent导入文件
 
     Args:
@@ -169,7 +169,7 @@ def generate_lobechat_agents(
 
     whole_dict = {
         "exportType": "agents",
-        "version": 5,
+        "version": version,
         "state": {
             "sessionGroups": session_groups,
             "sessions": []
