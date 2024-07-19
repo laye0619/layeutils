@@ -190,18 +190,20 @@ def generate_lobechat_agents(
             },
 
             "config": {
-                "displayMode": "chat",
+                "chatConfig": {
+                    "displayMode": "chat",
 
-                "enableAutoCreateTopic": True,
-                "autoCreateTopicThreshold": 2,
+                    "enableAutoCreateTopic": True,
+                    "autoCreateTopicThreshold": 2,
 
-                "enableCompressThreshold": bool(int(prompts_dict['enableCompressThreshold'])),
-                "compressThreshold": int(prompts_dict['compressThreshold']),
+                    "enableCompressThreshold": bool(int(prompts_dict['enableCompressThreshold'])),
+                    "compressThreshold": int(prompts_dict['compressThreshold']),
 
-                "enableHistoryCount": bool(int(prompts_dict['enableHistoryCount'])),
-                "historyCount": int(prompts_dict['historyCount']),
+                    "enableHistoryCount": bool(int(prompts_dict['enableHistoryCount'])),
+                    "historyCount": int(prompts_dict['historyCount']),
 
-                "inputTemplate": "" if pd.isna(prompts_dict['inputTemplate']) else prompts_dict['inputTemplate'],
+                    "inputTemplate": "" if pd.isna(prompts_dict['inputTemplate']) else prompts_dict['inputTemplate'],
+                },
 
                 "model": default_model,
 
