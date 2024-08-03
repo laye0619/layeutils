@@ -2,7 +2,7 @@ import logging
 import os
 
 
-def using_home_server_proxy(type: str = 'socks5', proxy_url: str = None):
+def using_home_server_proxy(type: str = 'http', proxy_url: str = None):
     """使用代理服务器
 
     Args:
