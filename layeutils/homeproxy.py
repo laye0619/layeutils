@@ -13,9 +13,9 @@ def using_home_server_proxy(type: str = 'http', proxy_url: str = None):
     if not proxy_url:
         match type:
             case 'socks5':
-                proxy = 'socks5://192.168.1.81:7891'
+                proxy = 'socks5://192.168.1.81:5330'
             case 'http':
-                proxy = 'http://192.168.1.81:7890'
+                proxy = 'http://192.168.1.81:5330'
     else:
         proxy = proxy_url
 
