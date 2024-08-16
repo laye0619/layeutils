@@ -2,6 +2,28 @@ import logging
 import os
 from collections import OrderedDict
 
+import requests
+
+
+def get_notes(path: str = '', format: str = 'application/json', server: str = 'http://192.168.1.23:27123') -> str:
+    """使用Local REST API插件；取回单个note或文件夹下note名列表
+
+    Args:
+        path (str, optional): 如果给定的是文件夹（需要以`/`结尾）则返回的是文件夹下所有note名列表；如果给定的是note文件名，则返回note内容. Defaults to ''.
+        format: 默认是`application/json`。可以修改成`application/vnd.olrapi.note+json`
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        str: _description_
+    """
+    headers = {
+        'accept': format,
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+    }
+
+    response = requests.get(f'{server}/vault/{path}', headers=headers)
+    return response.text
+
 
 def remove_frontmatter_property(folder_path: str, property_name: str):
     """给定的文件夹中所有后缀为.md的文件，删除frontmatter信息中给定的property
