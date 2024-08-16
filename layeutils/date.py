@@ -1,6 +1,36 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
+
+
+def get_date_list(start_date, end_date):
+    """
+    获取指定起始日期和结束日期之间的所有日期列表。
+
+    Args:
+      start_date: 起始日期，格式为 'YYYY-MM-DD'。
+      end_date: 结束日期，格式为 'YYYY-MM-DD'。
+
+    Returns:
+      一个包含所有日期的列表，格式为 ['YYYY-MM-DD', 'YYYY-MM-DD', ... ]。
+      如果起始日期晚于结束日期，则返回 ValueError。
+    """
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    except ValueError:
+        return ValueError("日期格式错误，请使用'YYYY-MM-DD'格式")
+
+    if start_date > end_date:
+        return ValueError("起始日期不能晚于结束日期")
+
+    date_list = []
+    current_date = start_date
+    while current_date <= end_date:
+        date_list.append(current_date.strftime('%Y-%m-%d'))
+        current_date += timedelta(days=1)
+
+    return date_list
 
 
 def get_q_end(target_date):
