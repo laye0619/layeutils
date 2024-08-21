@@ -55,3 +55,23 @@ def plotly_simple_line(df: pd.DataFrame, x_series, y_series, title: str = '', te
         y=y_series,
         title=title,
         template=template)
+
+def plotly_simple_bar(df: pd.DataFrame, x_series, y_series, title: str = '', template: str = 'plotly_dark'):
+    """最简单的柱状图，调用show()显示
+
+    Args:
+        df (pd.DataFrame): _description_
+        x_series (_type_): _description_
+        y_series (_type_): _description_
+        title (str, optional): _description_. Defaults to ''.
+        template (str, optional): _description_. Defaults to 'plotly_dark'.
+
+    Returns:
+        _type_: _description_
+    """
+    return px.bar(
+        data_frame=df,
+        x=x_series,
+        y=y_series,
+        title=title,
+        template=template)
