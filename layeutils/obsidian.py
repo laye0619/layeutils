@@ -25,6 +25,111 @@ def get_notes(path: str = '', format: str = 'application/json', server: str = 'h
     return response.text
 
 
+def insert_content_to_note(
+        path: str,
+        content: str,
+        heading_place: str,
+        content_insert_position: str = 'beginning',
+        server: str = 'http://192.168.1.23:27123'
+):
+    """在指定位置（heading区分）插入内容，heading是必须的，如果没有heading的note，不能使用此方法
+
+    Args:
+        path (str): _description_
+        heading_place (str): 如果是多级heading → `level_1_heading::level_2_heading`
+        content_insert_position (str): ['beginning', 'end']
+        content (str, optional): 
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        _type_: _description_
+    """
+    headers = {
+        'accept': '*/*',
+        'Heading': heading_place,
+        'Content-Insertion-Position': content_insert_position,
+        'Heading-Boundary': '::',
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+        'Content-Type': 'text/markdown',
+    }
+
+    response = requests.patch(f'{server}/vault/{path}', headers=headers, data=content)
+    return response
+
+
+def update_note(
+        path: str,
+        content: str,
+        server: str = 'http://192.168.1.23:27123'
+):
+    """更新内容到给定的note文件上，如果给定的note文件名不存在，则新建note，如果存在则**清空内容更新**
+
+    Args:
+        path (str): _description_
+        content (str): _description_
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        _type_: _description_
+    """
+    headers = {
+        'accept': '*/*',
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+        'Content-Type': 'text/markdown',
+    }
+
+    response = requests.put(f'{server}/vault/{path}', headers=headers, data=content)
+    return response
+
+
+def append_content_to_note(
+        path: str,
+        content: str,
+        server: str = 'http://192.168.1.23:27123'
+):
+    """将给定内容附加到给定的note文件末尾，如果给定的note文件名不存在，则新建note
+
+    Args:
+        path (str): _description_
+        content (str): _description_
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        _type_: _description_
+    """
+    headers = {
+        'accept': '*/*',
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+        'Content-Type': 'text/markdown',
+    }
+
+    response = requests.post(f'{server}/vault/{path}', headers=headers, data=content)
+    return response
+
+
+def search_note_name_by_dql(
+        query: str,
+        server: str = 'http://192.168.1.23:27123'
+):
+    """通过DQL语句查询note列表
+
+    Args:
+        query (str): 类似在OB中使用dataview查询TABLE(不能使用LIST)
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        _type_: _description_
+    """
+    headers = {
+        'accept': 'application/json',
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+        'Content-Type': 'application/vnd.olrapi.dataview.dql+txt',
+    }
+
+    response = requests.post(f'{server}/search/', headers=headers, data=query)
+    return response
+
+
 def remove_frontmatter_property(folder_path: str, property_name: str):
     """给定的文件夹中所有后缀为.md的文件，删除frontmatter信息中给定的property
 
