@@ -16,5 +16,5 @@ def send_message(bot_token: str, msg: str, chat_id: str = '6097092665'):
     return bot.send_message(
         chat_id=chat_id, 
         text=msg, 
-        parse_mode='MarkdownV2'
+        # parse_mode='MarkdownV2'
     )
