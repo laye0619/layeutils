@@ -81,6 +81,28 @@ def update_note(
     response = requests.put(f'{server}/vault/{path}', headers=headers, data=content)
     return response
 
+def delete_note(
+        path: str,
+        server: str = 'http://192.168.1.23:27123'        
+):
+    """删除给定的note文件
+
+    Args:
+        path (str): _description_
+        server (_type_, optional): _description_. Defaults to 'http://192.168.1.23:27123'.
+
+    Returns:
+        _type_: _description_
+    """
+    headers = {
+        'accept': '*/*',
+        'Authorization': 'Bearer 0db9f1c1d4ad38c2d3d03377ba7513bb90613191db72ed2fd1af5f47be32d8f7',
+    }
+
+    response = requests.put(f'{server}/vault/{path}', headers=headers)
+    return response
+
+
 
 def append_content_to_note(
         path: str,
