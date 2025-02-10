@@ -25,6 +25,19 @@ def get_notes(path: str = '', format: str = 'application/json', server: str = 'h
     return response.text
 
 
+def get_note_frontmatter(note_content: str):
+    """解析笔记的frontmatter"""
+    import yaml
+
+    frontmatter = {}
+    if note_content.startswith("---\n"):
+        try:
+            frontmatter = yaml.safe_load(note_content.split("---\n")[1])
+        except yaml.YAMLError as e:
+            print(f"解析frontmatter失败: {e}")
+    return frontmatter
+
+
 def insert_content_to_note(
         path: str,
         content: str,
@@ -81,9 +94,10 @@ def update_note(
     response = requests.put(f'{server}/vault/{path}', headers=headers, data=content)
     return response
 
+
 def delete_note(
         path: str,
-        server: str = 'http://192.168.1.23:27123'        
+        server: str = 'http://192.168.1.23:27123'
 ):
     """删除给定的note文件
 
@@ -101,7 +115,6 @@ def delete_note(
 
     response = requests.put(f'{server}/vault/{path}', headers=headers)
     return response
-
 
 
 def append_content_to_note(
