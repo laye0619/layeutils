@@ -1,6 +1,6 @@
 import logging
 import os
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 import requests
 
@@ -256,3 +256,32 @@ def append_tag_frontmatter_property(folder_path: str, tag: str) -> None:
                     logging.error(f"Error parsing YAML in {filename}: {exc}")
                 except ValueError:
                     logging.error(f"File {filename} does not appear to have a frontmatter.")
+
+
+def print_note_tree(folder: str, root_note: str):
+    """打印给定文件夹下的笔记树
+
+    Args:
+        folder (str): 文件夹路径
+        root_note (str): 根笔记名
+    """
+
+    def print_tree(tree, node, level=0):
+        """递归打印树状结构"""
+        print("    " * level + "- [[" + node + "]]")
+        for child in tree.get(node, []):
+            print_tree(tree, child, level + 1)
+
+    notes = get_notes(f"{folder}/")
+    tree = defaultdict(list)
+
+    # 首先构建父子关系
+    for note in notes:
+        content = get_notes(f"{folder}/{note}")
+        frontmatter = get_note_frontmatter(content)
+        parent = frontmatter.get("parent", "")
+        if parent:
+            parent_note = parent.strip("[]").split("|")[0]
+            tree[parent_note].append(note.split('.md')[0])
+
+    print_tree(tree, root_note)
