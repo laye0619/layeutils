@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from collections import OrderedDict, defaultdict
@@ -272,7 +273,7 @@ def print_note_tree(folder: str, root_note: str):
         for child in tree.get(node, []):
             print_tree(tree, child, level + 1)
 
-    notes = get_notes(f"{folder}/")
+    notes = json.loads(get_notes(f"{folder}/"))["files"]
     tree = defaultdict(list)
 
     # 首先构建父子关系
