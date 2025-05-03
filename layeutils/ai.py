@@ -230,3 +230,39 @@ def generate_lobechat_agents(
 
     with open(f"lobechat_agents_{default_model}.json", "w", encoding="utf8") as f:
         json.dump(whole_dict, f, ensure_ascii=False)
+
+
+def clear_lobechat_messages(json_path: str, json_result: str = 'result.json', keep_favorites: bool = True) -> None:
+    """clear all messages and topics in lobechat json file, except for the favorites.
+
+    Args:
+        json_path (str): _description_
+        json_result (str, optional): _description_. Defaults to 'result.json'.
+        keep_favorites (bool, optional): _description_. Defaults to True.
+    """
+    import json
+    record = None
+    with open(json_path, 'r') as f:
+        record = json.load(f)
+    record['data']['messagePlugins'] = []
+    record['data']['messageTranslates'] = []
+
+    if keep_favorites:
+        topics = []
+        favorite_topic_id = []
+        for topic in record['data']['topics']:
+            if topic['favorite'] == True:
+                topics.append(topic)
+                favorite_topic_id.append(topic['id'])
+        record['data']['topics'] = topics
+
+        new_messages = []
+        for message in record['data']['messages']:
+            if message['topicId'] in favorite_topic_id:
+                new_messages.append(message)
+        record['data']['messages'] = new_messages
+    else:
+        record['data']['topics'] = []
+        record['data']['messages'] = []
+    with open(json_result, 'w') as f:
+        json.dump(record, f, indent=4)
