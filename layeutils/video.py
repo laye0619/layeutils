@@ -1,4 +1,26 @@
+"""Example
+import layeutils.video as util_video
+_, channels = util_video.get_playlist_channels_from_m3u('tv_channels_6b1a1759896a_plus.m3u')
 
+target_group_keywords = [
+    "US|", "CA|", "UK|", "IE|", "TN|", 
+    "NETFLIX DOCU", 
+    "AMAZON DOCU", 
+    "APPLE+ DOCU",
+    "DISCOVERY+", 
+    "EN - DOCUMENTARIES"
+    ] 
+remove_group_keywords = ["SPORT", "NBA", "WNBA", "ESPN", "NHL", "NFL", "FLO","MLB", "GOLF", "TENNIS", "FIFA"] 
+
+filtered_channels = util_video.filter_channel_by_group_keywords(
+    includes = target_group_keywords,
+    excludes = remove_group_keywords,
+    channels = channels,
+)
+
+util_video.write_to_m3u_file(filtered_channels,'result-playlist.m3u')
+
+"""
 from typing import List
 
 from ipytv.channel import IPTVChannel
