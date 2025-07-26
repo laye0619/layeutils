@@ -16,7 +16,7 @@ def get_playlist_channels_from_m3u(m3u_path: str) -> tuple[M3UPlaylist, List[IPT
     """
     from ipytv import playlist
 
-    pl: M3UPlaylist = playlist.loadf('m3u_path')
+    pl: M3UPlaylist = playlist.loadf(m3u_path)
     channels: List[IPTVChannel] = pl.get_channels()
     return pl, channels
 
