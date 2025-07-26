@@ -44,8 +44,14 @@ def filter_channel_by_group_keywords(
     """使用ipytv库，根据给定的关键词列表，逐一查询给定的channel对应的group-title属性，过滤出符合条件的频道列表
 
     Args:
-        includes (List[str]): 包含的关键词列表
-        excludes (List[str]): 排除的关键词列表
+        includes (List[str]): 包含的关键词列表, eg. 
+            ["US|", "CA|", "UK|", "IE|", "TN|", 
+            "NETFLIX DOCU", 
+            "AMAZON DOCU", 
+            "APPLE+ DOCU",
+            "DISCOVERY+", 
+            "EN - DOCUMENTARIES"] 
+        excludes (List[str]): 排除的关键词列表, eg. ["SPORT", "NBA", "WNBA", "ESPN", "NHL", "NFL", "FLO","MLB", "GOLF", "TENNIS", "FIFA"] 
         channels (List[IPTVChannel]): 频道列表
 
     Returns:
@@ -62,12 +68,12 @@ def filter_channel_by_group_keywords(
 
 def write_to_m3u_file(
         channels: List[IPTVChannel],
-        output_path: str = 'result_playlist.m3u') -> None:
+        output_path: str = 'playlist.m3u') -> None:
     """使用ipytv库，将给定的频道列表写入到m3u文件中
 
     Args:
         channels (List[IPTVChannel]): _description_
-        output_path (str): default 'result_playlist.m3u'
+        output_path (str): default 'playlist.m3u'
     """
     result_pl = M3UPlaylist()
     result_pl.append_channels(channels)
