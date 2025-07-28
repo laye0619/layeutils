@@ -15,7 +15,7 @@ class TradingRecord():
     daily_journal: str
     symbol: str
     trading_time: datetime
-    direction: int
+    direction: str
     quality: float
     filled_price: float
     commission: float
@@ -53,7 +53,7 @@ class TradingRecord():
         if hasattr(self, 'trading_time'):
             result['trading_time'] = self.trading_time.isoformat()
         if hasattr(self, 'direction'):
-            result['direction'] = str(self.direction)
+            result['direction'] = self.direction
         if hasattr(self, 'quality'):
             result['quality'] = str(self.quality)
         if hasattr(self, 'filled_price'):
