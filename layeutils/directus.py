@@ -12,9 +12,9 @@ class TradingRecord():
     """
 
     id: str
-    open_time: datetime
-    close_time: datetime
+    daily_journal: str
     symbol: str
+    trading_time: datetime
     direction: int
     quality: float
     filled_price: float
@@ -28,15 +28,13 @@ class TradingRecord():
             directus_obj (dict): Directus object containing trading record data
         """
         self.id = directus_obj.get('id')
-        self.open_time = datetime.fromisoformat(directus_obj.get(
-            'open_time')) if directus_obj.get('open_time') else None
-        self.close_time = datetime.fromisoformat(directus_obj.get(
-            'close_time')) if directus_obj.get('close_time') else None
+        self.daily_journal = directus_obj.get('daily_journal')
         self.symbol = directus_obj.get('symbol')
-        self.direction = int(directus_obj.get('direction')) if directus_obj.get('direction') else None
-        self.quality = float(directus_obj.get('quality')) if directus_obj.get('quality') else None
-        self.filled_price = float(directus_obj.get('filled_price')) if directus_obj.get('filled_price') else None
-        self.commission = float(directus_obj.get('commission')) if directus_obj.get('commission') else None
+        self.trading_time = datetime.fromisoformat(directus_obj.get('trading_time'))
+        self.direction = int(directus_obj.get('direction'))
+        self.quality = float(directus_obj.get('quality'))
+        self.filled_price = float(directus_obj.get('filled_price'))
+        self.commission = float(directus_obj.get('commission'))
         self.comments = directus_obj.get('comments')
 
     def to_directus_obj(self):
@@ -48,12 +46,12 @@ class TradingRecord():
         result = {}
         if hasattr(self, 'id'):
             result['id'] = self.id
-        if hasattr(self, 'open_time'):
-            result['open_time'] = self.open_time.isoformat()
-        if hasattr(self, 'close_time'):
-            result['close_time'] = self.close_time.isoformat()
+        if hasattr(self, 'daily_journal'):
+            result['daily_journal'] = self.daily_journal
         if hasattr(self, 'symbol'):
             result['symbol'] = self.symbol
+        if hasattr(self, 'trading_time'):
+            result['trading_time'] = self.trading_time.isoformat()
         if hasattr(self, 'direction'):
             result['direction'] = str(self.direction)
         if hasattr(self, 'quality'):
