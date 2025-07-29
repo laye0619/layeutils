@@ -7,7 +7,7 @@ from directus_sdk_py import DirectusClient, DirectusQueryBuilder, DOp
 class TradingRecord():
     """Trading Record Class
 
-    Attributes: id, open_time, close_time, symbol, direction, quality, filled_price, commission, comments
+    Attributes: id, open_time, close_time, symbol, direction, quantity, filled_price, commission, comments
 
     """
 
@@ -16,7 +16,7 @@ class TradingRecord():
     symbol: str
     trading_time: datetime
     direction: str
-    quality: float
+    quantity: float
     filled_price: float
     commission: float
     comments: str
@@ -32,7 +32,7 @@ class TradingRecord():
         self.symbol = directus_obj.get('symbol')
         self.trading_time = datetime.fromisoformat(directus_obj.get('trading_time'))
         self.direction = int(directus_obj.get('direction'))
-        self.quality = float(directus_obj.get('quality'))
+        self.quantity = float(directus_obj.get('quantity'))
         self.filled_price = float(directus_obj.get('filled_price'))
         self.commission = float(directus_obj.get('commission'))
         self.comments = directus_obj.get('comments')
@@ -54,8 +54,8 @@ class TradingRecord():
             result['trading_time'] = self.trading_time.isoformat()
         if hasattr(self, 'direction'):
             result['direction'] = self.direction
-        if hasattr(self, 'quality'):
-            result['quality'] = str(self.quality)
+        if hasattr(self, 'quantity'):
+            result['quantity'] = str(self.quantity)
         if hasattr(self, 'filled_price'):
             result['filled_price'] = str(self.filled_price)
         if hasattr(self, 'commission'):
@@ -63,6 +63,43 @@ class TradingRecord():
         if hasattr(self, 'comments'):
             result['comments'] = self.comments
         return result
+
+    def create_trading_record(self, client: DirectusClient):
+        """Create a new trading record in Directus.
+        Args:
+            client (DirectusClient): Directus Client instance
+        Returns:
+            The created trading record item
+        """
+        return client.create_item(
+            collection_name='trading_record',
+            item_data=self.to_directus_obj()
+        )
+
+    def update_trading_record(self, client: DirectusClient):
+        """Update an existing trading record in Directus.
+
+        Args:
+            client (DirectusClient): Directus Client instance
+        Returns:
+            The updated trading record item
+        """
+        return client.update_item(
+            collection_name='trading_record',
+            item_id=self.id,
+            item_data=self.to_directus_obj()
+        )
+
+    def delete_trading_record(self, client: DirectusClient):
+        """Delete a trading record from Directus.
+
+        Args:
+            client (DirectusClient): Directus Client instance
+        """
+        client.delete_item(
+            collection_name='trading_record',
+            item_id=self.id
+        )
 
 
 def get_directus_client(
