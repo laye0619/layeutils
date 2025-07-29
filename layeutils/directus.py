@@ -120,7 +120,7 @@ def create_item_to_collection(
 ):
     return client.create_item(
         collection_name=collection_name,
-        directus_item_obj=directus_item_obj
+        item_data=directus_item_obj
     )
 
 
