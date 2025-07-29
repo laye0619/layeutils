@@ -21,23 +21,23 @@ class TradingRecord():
     commission: float
     comments: str
 
-    def load_from_directus_obj(self, directus_obj: dict):
+    def load_from_directus_item_obj(self, directus_item_obj: dict):
         """ Load TradingRecord instance from a Directus object.
 
         Args:
             directus_obj (dict): Directus object containing trading record data
         """
-        self.id = directus_obj.get('id')
-        self.daily_journal = directus_obj.get('daily_journal')
-        self.symbol = directus_obj.get('symbol')
-        self.trading_time = datetime.fromisoformat(directus_obj.get('trading_time'))
-        self.direction = int(directus_obj.get('direction'))
-        self.quantity = float(directus_obj.get('quantity'))
-        self.filled_price = float(directus_obj.get('filled_price'))
-        self.commission = float(directus_obj.get('commission'))
-        self.comments = directus_obj.get('comments')
+        self.id = directus_item_obj.get('id')
+        self.daily_journal = directus_item_obj.get('daily_journal')
+        self.symbol = directus_item_obj.get('symbol')
+        self.trading_time = datetime.fromisoformat(directus_item_obj.get('trading_time'))
+        self.direction = int(directus_item_obj.get('direction'))
+        self.quantity = float(directus_item_obj.get('quantity'))
+        self.filled_price = float(directus_item_obj.get('filled_price'))
+        self.commission = float(directus_item_obj.get('commission'))
+        self.comments = directus_item_obj.get('comments')
 
-    def to_directus_obj(self):
+    def to_directus_item_obj(self):
         """ Convert the TradingRecord instance to a dictionary.
 
         Returns:
@@ -73,7 +73,7 @@ class TradingRecord():
         """
         return client.create_item(
             collection_name='trading_record',
-            item_data=self.to_directus_obj()
+            item_data=self.to_directus_item_obj()
         )
 
     def update_trading_record(self, client: DirectusClient):
@@ -87,7 +87,7 @@ class TradingRecord():
         return client.update_item(
             collection_name='trading_record',
             item_id=self.id,
-            item_data=self.to_directus_obj()
+            item_data=self.to_directus_item_obj()
         )
 
     def delete_trading_record(self, client: DirectusClient):
@@ -111,6 +111,41 @@ def get_directus_client(
         DirectusClient: Directus Client instance
     """
     return DirectusClient(url=url, token=access_token)
+
+
+def create_item_to_collection(
+    client: DirectusClient,
+    collection_name: str,
+    directus_item_obj: dict
+):
+    return client.create_item(
+        collection_name=collection_name,
+        directus_item_obj=directus_item_obj
+    )
+
+
+def update_item(
+    client: DirectusClient,
+    collection_name: str,
+    item_id: str,
+    directus_item_obj: dict
+):
+    return client.update_item(
+        collection_name=collection_name,
+        item_id=item_id,
+        item_data=directus_item_obj
+    )
+
+
+def delete_item(
+    client: DirectusClient,
+    collection_name: str,
+    item_id: str
+):
+    client.delete_item(
+        collection_name=collection_name,
+        item_id=item_id
+    )
 
 
 def get_items_from_collection(
@@ -151,46 +186,3 @@ def build_query_by_datetime_range(
         [start_time.isoformat(), end_time.isoformat()])
         .build())
     return query
-
-
-def create_trading_record(client: DirectusClient, trading_record: TradingRecord):
-    """Create a new trading record in Directus.
-    Args:
-        client (DirectusClient): Directus Client instance
-        trading_record (TradingRecord): TradingRecord instance to be created
-    Returns:
-        The created trading record item
-    """
-    return client.create_item(
-        collection_name='trading_record',
-        item_data=trading_record.to_directus_obj()
-    )
-
-
-def update_trading_record(client: DirectusClient, trading_record: TradingRecord):
-    """Update an existing trading record in Directus.
-
-    Args:
-        client (DirectusClient): Directus Client instance
-        trading_record (TradingRecord): TradingRecord instance to be updated
-    Returns:
-        The updated trading record item
-    """
-    return client.update_item(
-        collection_name='trading_record',
-        item_id=trading_record.id,
-        item_data=trading_record.to_directus_obj()
-    )
-
-
-def delete_trading_record(client: DirectusClient, trading_record_id: str):
-    """Delete a trading record from Directus.
-
-    Args:
-        client (DirectusClient): Directus Client instance
-        trading_record_id (str): ID of the trading record to be deleted
-    """
-    client.delete_item(
-        collection_name='trading_record',
-        item_id=trading_record_id
-    )
