@@ -104,7 +104,7 @@ class TradingRecord():
 
 def get_directus_client(
         url: str = 'https://directus.laye.wang',
-        access_token: str = 'CLo_fK9xZ2lovcaIPKnGpFqQMzX0WBH0') -> DirectusClient:
+        access_token: str = 'MjjolzJJhAl8DNOtlY9FtLs8JqHdzzS3') -> DirectusClient:
     """Get Directus Client
 
     Returns:
