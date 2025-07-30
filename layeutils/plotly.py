@@ -95,6 +95,6 @@ def plotly_simple_pie(
     return px.pie(
         data_frame=df,
         values=value_series,
-        names=by_series
+        names=by_series,
         title=title,
         template=template)
