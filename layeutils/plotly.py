@@ -36,8 +36,8 @@ def dual_axis_plotly_line(data_df: pd.DataFrame, l1_col: str, l2_col: str, title
     return go.Figure(data=data, layout=layout)
 
 
-def plotly_simple_line(df: pd.DataFrame, x_series, y_series, title: str = '', template: str = 'plotly_dark'):
-    """最简单的线图，调用show()显示
+def plotly_simple_line(df: pd.DataFrame, x_series: str, y_series: str, title: str = '', template: str = 'plotly_dark'):
+    """最简单的线图，调用show()显示，或者继续增加设置- fig.update_traces然后调用show()显示
 
     Args:
         df (pd.DataFrame): _description_
@@ -56,8 +56,9 @@ def plotly_simple_line(df: pd.DataFrame, x_series, y_series, title: str = '', te
         title=title,
         template=template)
 
-def plotly_simple_bar(df: pd.DataFrame, x_series, y_series, title: str = '', template: str = 'plotly_dark'):
-    """最简单的柱状图，调用show()显示
+
+def plotly_simple_bar(df: pd.DataFrame, x_series: str, y_series: str, title: str = '', template: str = 'plotly_dark'):
+    """最简单的柱状图，调用show()显示，或者继续增加设置- fig.update_traces然后调用show()显示
 
     Args:
         df (pd.DataFrame): _description_
@@ -73,5 +74,27 @@ def plotly_simple_bar(df: pd.DataFrame, x_series, y_series, title: str = '', tem
         data_frame=df,
         x=x_series,
         y=y_series,
+        title=title,
+        template=template)
+
+
+def plotly_simple_pie(
+        df: pd.DataFrame, value_series: str, by_series: str, title: str = '', template: str = 'plotly_dark'):
+    """最简单的饼图，调用show()显示，或者继续增加设置- fig.update_traces然后调用show()显示
+
+    Args:
+        df (pd.DataFrame): _description_
+        value_series (str): _description_
+        by_series (str): _description_
+        title (str, optional): _description_. Defaults to ''.
+        template (str, optional): _description_. Defaults to 'plotly_dark'.
+
+    Returns:
+        _type_: _description_
+    """
+    return px.pie(
+        data_frame=df,
+        values=value_series,
+        names=by_series
         title=title,
         template=template)
