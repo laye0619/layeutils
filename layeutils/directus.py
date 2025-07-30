@@ -151,7 +151,7 @@ def delete_item(
 def get_items_from_collection(
         client: DirectusClient,
         collection_name: str,
-        query: dict = None):
+        query_builder: DirectusQueryBuilder = None):
     """Get items from a Directus collection.
 
     Args:
@@ -163,26 +163,39 @@ def get_items_from_collection(
     Returns:
         List of items in the specified collection
     """
-    items = client.get_items(collection_name, query)
+    items = []
+    count = 0
+    while True:
+        if query_builder:
+            batch_items = client.get_items(
+                collection_name, 
+                query_builder.limit(100).offset(count).build()
+                )
+        else:
+            batch_items = client.get_items(
+                collection_name, 
+                DirectusQueryBuilder().limit(100).offset(count).build()
+                )
+        if len(batch_items) == 0:
+            break
+        items.extend(batch_items)
+        count += 100
     return items
 
 
 def build_query_by_datetime_range(
         directus_collection_field: str,
         start_time: datetime,
-        end_time: datetime) -> dict:
+        end_time: datetime) -> DirectusQueryBuilder:
     """Build a query to filter items by a datetime range.
     Args:
         directus_collection_field (str): The field in the Directus collection to filter by datetime
         start_time (datetime): Start of the datetime range
         end_time (datetime): End of the datetime range
     Returns:
-        dict: Query dictionary with the datetime range filter
+        DirectusQueryBuilder Object
     """
-    builder = DirectusQueryBuilder()
-    query = (builder.field(
+    return DirectusQueryBuilder().field(
         directus_collection_field,
         DOp.BETWEEN,
         [start_time.isoformat(), end_time.isoformat()])
-        .build())
-    return query
