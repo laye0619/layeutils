@@ -176,6 +176,8 @@ def get_items_from_collection(
                 collection_name, 
                 DirectusQueryBuilder().limit(100).offset(count).build()
                 )
+        if not isinstance(batch_items, list):
+            raise TypeError(f'Item返回不是list类型，batch_items：{batch_items}')
         if len(batch_items) == 0:
             break
         items.extend(batch_items)
