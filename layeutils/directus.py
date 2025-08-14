@@ -103,8 +103,9 @@ class TradingRecord():
 
 
 def get_directus_client(
-        url: str = 'https://directus.laye.wang',
-        access_token: str = 'zBs4wBZd7aUhCPTJXVp89BUGHNxun8lD') -> DirectusClient:
+    access_token: str,
+    url: str = 'http://directus'
+) -> DirectusClient:
     """Get Directus Client
 
     Returns:
@@ -168,14 +169,14 @@ def get_items_from_collection(
     while True:
         if query_builder:
             batch_items = client.get_items(
-                collection_name, 
+                collection_name,
                 query_builder.limit(100).offset(count).build()
-                )
+            )
         else:
             batch_items = client.get_items(
-                collection_name, 
+                collection_name,
                 DirectusQueryBuilder().limit(100).offset(count).build()
-                )
+            )
         if not isinstance(batch_items, list):
             raise TypeError(f'Item返回不是list类型，batch_items：{batch_items}')
         if len(batch_items) == 0:
