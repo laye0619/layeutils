@@ -129,12 +129,23 @@ def update_item(
     client: DirectusClient,
     collection_name: str,
     item_id: str,
-    directus_item_obj: dict
+    field_value: dict
 ):
+    """update existing item with field and value dict
+
+    Args:
+        client (DirectusClient): _description_
+        collection_name (str): _description_
+        item_id (str): _description_
+        field_value (dict): eg. {'title': 'Updated Title'}
+
+    Returns:
+        _type_: _description_
+    """
     return client.update_item(
         collection_name=collection_name,
         item_id=item_id,
-        item_data=directus_item_obj
+        item_data=field_value
     )
 
 
