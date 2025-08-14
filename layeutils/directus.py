@@ -104,7 +104,7 @@ class TradingRecord():
 
 def get_directus_client(
     access_token: str,
-    url: str = 'http://directus'
+    url: str = 'http://directus:8055'
 ) -> DirectusClient:
     """Get Directus Client
 
